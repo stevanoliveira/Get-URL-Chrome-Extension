@@ -18,6 +18,12 @@ const ulEl = document.getElementById("ul-el");
 const deleteEl = document.querySelector("#delete-btn");
 const divItens = document.querySelector("#div-itens");
 const separateDivider = document.querySelector("#separate-el");
+const errorEl = document.querySelector("#error");
+const btnTextInput = document.querySelector("#btn-input");
+let removeLiBtn = document.querySelector(".close-btn");
+const inputElValue = inputEl.value;
+
+const minChars = 1;
 
 let leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"));
 
@@ -31,6 +37,14 @@ if (leadsFromLocalStorage) {
   myLeads = leadsFromLocalStorage;
   renderLeads();
 }
+
+if (leadsFromLocalStorage === null) {
+  deleteEl.disabled = true;
+}
+
+btnTextInput.addEventListener("click", () => {
+  inputEl.value = "";
+});
 
 inputEl.addEventListener("keyup", function (event) {
   event.preventDefault();
@@ -46,9 +60,13 @@ inputBtn.addEventListener("click", function () {
 
   localStorage.setItem("myLeads", JSON.stringify(myLeads));
 
+  deleteEl.disabled = false;
+
   renderLeads();
 
   removeHiddenClass();
+
+  inputBtn.disabled = true;
 
   inputEl.focus();
 });
@@ -57,20 +75,27 @@ deleteEl.addEventListener("click", function () {
   addHiddenClass();
   localStorage.clear("myLeads");
   myLeads = [];
+  deleteEl.disabled = true;
   renderLeads();
+  inputEl.focus();
 });
 
 function renderLeads() {
   let listItems = "";
+
   for (let i = 0; i < myLeads.length; i++) {
     listItems += `
-      <li>${i + 1} -
+      <li class="li-item-el">
+        <button class="close-btn" id="remove-li-el">
+          X
+        </button>${i + 1} -
         <a href="${myLeads[i]}" target="_blank">
         ${myLeads[i]}
-        </a>
+        </a>        
       </li>
       `;
   }
+
   ulEl.innerHTML = listItems;
 }
 
@@ -86,3 +111,27 @@ function addHiddenClass() {
   divItens.setAttribute("class", "hidden");
   separateDivider.setAttribute("class", "hidden");
 }
+
+const setError = (length) => {
+  const message = `Please enter ${minChars - length} more character(s).`;
+  errorEl.innerHTML = message;
+  errorEl.style.display = "block";
+  inputEl.classList.add("errorInput");
+};
+
+const hideError = () => {
+  errorEl.style.display = "none";
+  inputEl.classList.remove("errorInput");
+};
+
+inputEl.addEventListener("keyup", () => {
+  const enteredLength = inputEl.value.length;
+
+  if (enteredLength >= minChars) {
+    inputBtn.disabled = false;
+    return hideError();
+  }
+
+  setError(enteredLength);
+  inputBtn.disabled = true;
+});

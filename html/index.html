@@ -12,15 +12,17 @@
         placeholder="Past the URL here"
         required
       />
+      <button id="btn-input">Erase</button>
+      <!-- <p id="error" style="color: red"></p> -->
       <div class="btn-container">
-        <button id="input-btn">SAVE INPUT</button>
+        <button id="input-btn" disabled>SAVE INPUT</button>
         <hr id="between-el" />
         <button id="delete-btn">DELETE ALL</button>
       </div>
     </div>
     <hr id="separate-el" class="hidden" />
     <div id="div-itens" class="itens-container hidden">
-      <ul id="ul-el"></ul>
+      <ul id="ul-el" class="list-group"></ul>
     </div>
 
     <script src="/javascript/scripts.js"></script>
