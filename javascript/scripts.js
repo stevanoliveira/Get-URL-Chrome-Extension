@@ -64,7 +64,7 @@ function renderLeads() {
   let listItems = "";
   for (let i = 0; i < myLeads.length; i++) {
     listItems += `
-      <li>
+      <li>${i + 1} -
         <a href="${myLeads[i]}" target="_blank">
         ${myLeads[i]}
         </a>
